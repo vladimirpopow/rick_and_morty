@@ -7,10 +7,21 @@ import 'package:rick_and_morty_test/feature/presentation/bloc/person_list_cubit/
 import 'package:rick_and_morty_test/feature/presentation/widgets/person_card_widget.dart';
 
 class PersonsList extends StatelessWidget {
-  const PersonsList({super.key});
+  final scrollController = ScrollController();
+
+  void setupscrollController(BuildContext context) {
+    scrollController.addListener(() {
+      if (scrollController.position.atEdge) {
+        if (scrollController.position.pixels != 0) {
+          BlocProvider.of<PersonListCubit>(context).loadPerson();
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    setupscrollController(context);
     return BlocBuilder<PersonListCubit, PersonState>(builder: (context, state) {
       List<PersonEntity> persons = [];
       if (state is PersonLoading && state.isFirstFetch) {
