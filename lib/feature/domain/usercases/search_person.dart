@@ -4,19 +4,19 @@ import 'package:rick_and_morty_test/core/error/failure.dart';
 import 'package:rick_and_morty_test/feature/domain/entities/person_entity.dart';
 import 'package:rick_and_morty_test/feature/domain/repositories/person_repositories.dart';
 
-class SearchPersons {
+class SearchPerson {
   final PersonRepositories personRepository;
 
-  SearchPersons(this.personRepository);
+  SearchPerson(this.personRepository);
 
-  Future<Either<Failure, List<PersonEntity>>> call(String query) async {
-    return await personRepository.searchPerson(query);
+  Future<Either<Failure, List<PersonEntity>>> call(SearchPersonParams params) async {
+    return await personRepository.searchPerson(params.query);
   }
 }
 
-class SearchPersonsParams extends Equatable {
+class SearchPersonParams extends Equatable {
   final String query;
-  const SearchPersonsParams({required this.query});
+  const SearchPersonParams({required this.query});
   @override
-  List<Object?> get props => [query];
+  List<Object> get props => [query];
 }
