@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,9 +25,13 @@ class PersonsList extends StatelessWidget {
   Widget build(BuildContext context) {
     setupscrollController(context);
     return BlocBuilder<PersonListCubit, PersonState>(builder: (context, state) {
+      bool isLoading = false;
       List<PersonEntity> persons = [];
       if (state is PersonLoading && state.isFirstFetch) {
         return _loadingIndicator();
+      } else if (state is PersonLoading) {
+        persons = state.oldPersonList;
+        isLoading = true;
       } else if (state is PersonLoaded) {
         persons = state.personList;
       } else if (state is PersonError) {
@@ -36,15 +42,24 @@ class PersonsList extends StatelessWidget {
       }
 
       return ListView.separated(
+          controller: scrollController,
           itemBuilder: (context, index) {
-            return PersonCard(person: persons[index]);
+            if (index < persons.length) {
+              return PersonCard(person: persons[index]);
+            } else {
+              Timer(Duration(milliseconds: 30), () {
+                scrollController
+                    .jumpTo(scrollController.position.maxScrollExtent);
+              });
+              return _loadingIndicator();
+            }
           },
           separatorBuilder: (context, index) {
             return Divider(
               color: Colors.grey[400],
             );
           },
-          itemCount: persons.length);
+          itemCount: persons.length + (isLoading ? 1 : 0));
     });
   }
 
