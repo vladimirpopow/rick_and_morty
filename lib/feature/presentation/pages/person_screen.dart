@@ -8,18 +8,18 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-      title: Text('Charecters'),
-      centerTitle: true,
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.search),
-          color: Colors.white,
-        )
-      ],
-      
-    ), body: PersonsList(),
+      appBar: AppBar(
+        title: Text('Персонажи'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.search),
+            color: Colors.white,
+          )
+        ],
+      ),
+      body: PersonsList(),
     );
   }
 }
